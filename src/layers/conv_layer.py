@@ -2,19 +2,17 @@ import numpy as np
 from google.protobuf import text_format
 import sys
 sys.path.append("..")
-from layer import layer
+from layer import Layer
 from proto import caffe_pb2
 
 
-class convolution_layer(layer):
+class ConvolutionLayer(Layer):
     def __init__(self,parameter):
-        super(convolution_layer, self).__init__(parameter)
+        super(ConvolutionLayer, self).__init__(parameter)
         self.__convolution_param = parameter.convolution_param
-        print(self._name)
-        print(self._type)
-        print(self.__convolution_param)
 
-    def forward(self):
+    def forward(self,blobs):
+        print("convolution forward")
         pass
 
 if __name__=="__main__":
@@ -24,6 +22,6 @@ if __name__=="__main__":
 
     parameter = [layer for layer in net.layer if layer.type=="Convolution"][0]
 
-    conv = convolution_layer(parameter)
+    conv = ConvolutionLayer(parameter)
 
 

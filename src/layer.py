@@ -1,15 +1,20 @@
-class layer(object):
+class Layer(object):
     def __init__(self,parameter):
         self._name = parameter.name
         self._type = parameter.type
-        self._bottom = parameter.bottom
-        self._top = parameter.top
+        self._bottoms = parameter.bottom
+        self._tops = parameter.top
 
+    def bottom(self):
+        return self._bottoms
 
-    def forward(self,bottom=None,top=None):
+    def top(self):
+        return self._tops
+
+    def forward(self,blobs):
         pass
 
-    def backward(self,bottom=None,top=None):
+    def backward(self,blobs):
         pass
 
 if __name__=="__main__":
