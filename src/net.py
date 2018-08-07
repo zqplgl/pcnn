@@ -3,8 +3,12 @@ import numpy as np
 import sys
 from layer import Layer
 from proto import caffe_pb2
-from layers.data_layer import DataLayer
+from layers.accuracy_layer import AccuracyLayer
 from layers.conv_layer import ConvolutionLayer
+from layers.data_layer import DataLayer
+from layers.inner_product_layer import InnerProductLayer
+from layers.pooling_layer import PoolingLayer
+from layers.relu_layer import ReLULayer
 class Net:
     def __init__(self,prototxt=None,parameter=None):
         if prototxt:
@@ -14,7 +18,7 @@ class Net:
         if not parameter:
             sys.stderr.write("error init\n")
 
-        self.__register_layers = ["Data","Convolution"]
+        self.__register_layers = ["Accuracy","Convolution","Data","InnerProduct","Pooling","ReLU"]
         self.__parameter = parameter
         self.__blobs  = {}
         self.__layers = []
@@ -37,9 +41,6 @@ class Net:
                 for top in layer.top:
                     if top not in self.__blobs.keys():
                         self.__blobs[top] = None
-                    else:
-                        sys.stderr.write("blobs %s has been exist\n"%top)
-                        sys.exit(1)
 
                 self.__layers.append(eval("%sLayer"%layer.type)(layer))
                 self.__layer_names.append(layer.name)
@@ -50,6 +51,25 @@ class Net:
     def load_weights(self,weight_file):
         net_parameter = caffe_pb2.NetParameter()
         net_parameter.ParseFromString(open(weight_file,"rb").read())
+
+        for layer in net_parameter.layer:
+            if layer.name not in self.__layer_names:
+                sys.stderr.write("ignore layer %s\n"%layer.name)
+                continue
+
+            l = self.__layers[self.__layer_names.index(layer.name)]
+
+            for blob in layer.blobs:
+                print(blob.shape)
+                print(len(blob.data))
+
+    def blobshape_convert(self,blobshape):
+        shape = []
+        for dim in blobshape:
+            shape.append(dim)
+
+        return shape
+
 
     def input(self,input):
         assert isinstance(input,dict),"input is not dict"
@@ -72,6 +92,7 @@ if __name__=="__main__":
     weight_file = "/home/zqp/install_lib/models/mnist/weight.caffemodel"
 
     net = Net(prototxt=prototxt)
+    net.load_weights(weight_file)
     #text_format.Merge(open(prototxt).read(),net_parameter)
 
 
