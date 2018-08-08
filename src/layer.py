@@ -1,4 +1,5 @@
 import numpy as np
+import sys
 class Layer(object):
     def __init__(self,parameter):
         self._name = parameter.name
@@ -21,7 +22,14 @@ class Layer(object):
         pass
 
     def load_parameter(self,blobs):
-        pass
+        w = np.reshape(np.array(blobs[0].data,dtype=np.float32),self.blobshape_convert(blobs[0].shape))
+        b = np.array(blobs[1].data)
+        assert b.shape==self._b.shape,"Layer %s w cannot convert parameter %s to %s"%(self._name,self._b.shape,b.shape)
+        assert w.shape==self._w.shape,"Layer %s b cannot convert parameter %s to %s"%(self._name,self._w.shape,w.shape)
+        self._w = w
+        self._b = b
+
+        sys.stderr.write("init Layer %s parameter w: %s b: %s successfully\n"%(self._name,self._w.shape,self._b.shape))
 
     def parameters(self):
         return self._w,self._b

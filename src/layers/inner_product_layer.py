@@ -1,3 +1,4 @@
+from functools import reduce
 import numpy as np
 from google.protobuf import text_format
 import sys
@@ -18,6 +19,10 @@ class InnerProductLayer(Layer):
         assert len(bottom_shape)>1,"error bottom %s"%bottom_shape
 
         self.__extract_parameter(parameter.inner_product_param)
+
+        self._w = np.zeros([self.__num_output,reduce(lambda x,y: x*y,bottom_shape[1:])],dtype=np.float32)
+        self._b = np.zeros([self.__num_output],dtype=np.float32)
+
 
         out_n = bottom_shape[0]
         out_c = self.__num_output
