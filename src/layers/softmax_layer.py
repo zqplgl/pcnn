@@ -1,14 +1,13 @@
 import numpy as np
-from google.protobuf import text_format
 import sys
 sys.path.append("..")
 from layer import Layer
 from proto import caffe_pb2
 
 
-class ReLULayer(Layer):
+class SoftmaxLayer(Layer):
     def __init__(self,parameter,blobs):
-        super(ReLULayer, self).__init__(parameter)
+        super(SoftmaxLayer, self).__init__(parameter)
         assert len(self._bottoms)==1,"bottom not equal 1"
         assert self._bottoms[0] in blobs.keys(),"bottom %s is not init"%self._bottoms[0]
         assert len(self._tops)==1,"top not equal 1"
@@ -22,15 +21,19 @@ class ReLULayer(Layer):
         sys.stderr.write("init Layer %s :%s->%s successfully\n"%(self._name,bottom_shape,blobs[self._tops[0]].shape))
 
     def forward(self,blobs):
-        print("relu forward")
+        print("convolution forward")
         pass
 
 if __name__=="__main__":
-    prototxt = "/home/zqp/github/caffe/examples/mnist/lenet_train_test.prototxt"
-    net = caffe_pb2.NetParameter()
-    text_format.Merge(open(prototxt).read(),net)
+    #prototxt = "/home/zqp/github/caffe/examples/mnist/lenet_train_test.prototxt"
+    #net = caffe_pb2.NetParameter()
+    #text_format.Merge(open(prototxt).read(),net)
 
-    parameter = [layer for layer in net.layer if layer.type=="Convolution"][0]
+    #parameter = [layer for layer in net.layer if layer.type=="Convolution"][0]
 
-    conv = ReLULayer(parameter)
+    #conv = ConvolutionLayer(parameter)
+
+    a = [1,2,3,4]
+    b = np.array(a,dtype=np.float32)
+    print(b)
 

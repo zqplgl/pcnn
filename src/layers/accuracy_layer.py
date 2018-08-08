@@ -7,7 +7,7 @@ from proto import caffe_pb2
 
 
 class AccuracyLayer(Layer):
-    def __init__(self,parameter):
+    def __init__(self,parameter,blobs):
         super(AccuracyLayer, self).__init__(parameter)
 
     def forward(self,blobs):

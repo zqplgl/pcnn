@@ -9,6 +9,7 @@ from layers.data_layer import DataLayer
 from layers.inner_product_layer import InnerProductLayer
 from layers.pooling_layer import PoolingLayer
 from layers.relu_layer import ReLULayer
+from layers.softmax_layer import SoftmaxLayer
 class Net:
     def __init__(self,prototxt=None,parameter=None):
         if prototxt:
@@ -18,31 +19,21 @@ class Net:
         if not parameter:
             sys.stderr.write("error init\n")
 
-        self.__register_layers = ["Accuracy","Convolution","Data","InnerProduct","Pooling","ReLU"]
+        self.__register_layers = ["Accuracy","Convolution","Data","InnerProduct","Pooling","ReLU","Softmax"]
         self.__parameter = parameter
         self.__blobs  = {}
         self.__layers = []
         self.__layer_names = []
 
         self.__init_from_parameter()
-        print(self.__layer_names)
 
     def __init_from_parameter(self):
-        if self.__parameter.input:
-            self.__blobs[self.__parameter.input[0]] = None
+        if self.__parameter.input and self.__parameter.input_dim:
+            self.__blobs[self.__parameter.input[0]] = np.zeros(self.__parameter.input_dim,dtype=np.float32)
 
         for layer in self.__parameter.layer:
             if layer.type in self.__register_layers:
-                for bottom in layer.bottom:
-                    if bottom not in self.__blobs.keys():
-                        sys.stderr.write("unknown blob: %s\n"%bottom)
-                        sys.exit(1)
-
-                for top in layer.top:
-                    if top not in self.__blobs.keys():
-                        self.__blobs[top] = None
-
-                self.__layers.append(eval("%sLayer"%layer.type)(layer))
+                self.__layers.append(eval("%sLayer"%layer.type)(layer,self.__blobs))
                 self.__layer_names.append(layer.name)
             else:
                 sys.stderr.write("unknown layer %s\n"%layer.type)
@@ -59,17 +50,9 @@ class Net:
 
             l = self.__layers[self.__layer_names.index(layer.name)]
 
-            for blob in layer.blobs:
-                print(blob.shape)
-                print(len(blob.data))
-
-    def blobshape_convert(self,blobshape):
-        shape = []
-        for dim in blobshape:
-            shape.append(dim)
-
-        return shape
-
+            if len(layer.blobs)==2:
+                sys.stderr.write("loading parameter from %s\n"%layer.name)
+                l.load_parameter(layer.blobs)
 
     def input(self,input):
         assert isinstance(input,dict),"input is not dict"
@@ -93,8 +76,6 @@ if __name__=="__main__":
 
     net = Net(prototxt=prototxt)
     net.load_weights(weight_file)
-    #text_format.Merge(open(prototxt).read(),net_parameter)
-
 
     #text_format.PrintMessage(net_parameter,open("test1.weights","w"))
 
