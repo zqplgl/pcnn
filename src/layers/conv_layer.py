@@ -53,7 +53,7 @@ class ConvolutionLayer(Layer):
             self.__stride_w = convolution_param.stride[0]
 
     def forward(self,blobs):
-        print("convolution forward")
+        print("%s forward"%self._name)
         pass
 
 if __name__=="__main__":

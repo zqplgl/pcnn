@@ -76,6 +76,7 @@ if __name__=="__main__":
 
     net = Net(prototxt=prototxt)
     net.load_weights(weight_file)
+    net.forward_layer(0)
 
     #text_format.PrintMessage(net_parameter,open("test1.weights","w"))
 

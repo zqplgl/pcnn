@@ -42,7 +42,7 @@ class PoolingLayer(Layer):
 
 
     def forward(self,blobs):
-        print("pooling forward")
+        print("%s forward"%self._name)
         pass
 
 if __name__=="__main__":

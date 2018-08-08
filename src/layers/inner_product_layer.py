@@ -36,7 +36,7 @@ class InnerProductLayer(Layer):
 
 
     def forward(self,blobs):
-        print("InnerProductLayer forward")
+        print("%s forward"%self._name)
         pass
 
 if __name__=="__main__":

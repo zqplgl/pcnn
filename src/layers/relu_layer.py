@@ -22,7 +22,7 @@ class ReLULayer(Layer):
         sys.stderr.write("init Layer %s :%s->%s successfully\n"%(self._name,bottom_shape,blobs[self._tops[0]].shape))
 
     def forward(self,blobs):
-        print("relu forward")
+        print("%s forward"%self._name)
         pass
 
 if __name__=="__main__":
