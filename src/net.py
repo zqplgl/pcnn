@@ -1,4 +1,5 @@
 from google.protobuf import text_format
+from collections import OrderedDict
 import numpy as np
 import sys
 from layer import Layer
@@ -39,7 +40,7 @@ class Net:
                 sys.stderr.write("unknown layer %s\n"%layer.type)
                 sys.exit(1)
 
-    def load_weights(self,weight_file):
+    def load_weights_from_caffemodel(self,weight_file):
         net_parameter = caffe_pb2.NetParameter()
         net_parameter.ParseFromString(open(weight_file,"rb").read())
 
@@ -54,6 +55,10 @@ class Net:
                 sys.stderr.write("loading parameter from %s\n"%layer.name)
                 l.load_parameter(layer.blobs)
 
+    @property
+    def blobs(self):
+        return self.__blobs
+
     def input(self,input):
         assert isinstance(input,dict),"input is not dict"
         for key in input.keys():
@@ -62,6 +67,9 @@ class Net:
             else:
                 sys.stderr.write("blob %s is not exist\n"%key)
                 sys.exit(1)
+
+    def reshape(self,blob_shape):
+        pass
 
     def forward_layer(self,index=0):
         for layer in self.__layers[index:]:
@@ -75,8 +83,14 @@ if __name__=="__main__":
     weight_file = "/home/zqp/install_lib/models/mnist/weight.caffemodel"
 
     net = Net(prototxt=prototxt)
-    net.load_weights(weight_file)
+    net.load_weights_from_caffemodel(weight_file)
+
+    im = np.array([[[[1,2,3,4,5,6],[4,5,6,7,8,9],[1,2,3,4,5,6],[4,5,6,7,8,9],[1,2,3,4,5,6],[4,5,6,7,8,9]]]],dtype=np.float32)
+    net.input({"data":im})
     net.forward_layer(0)
+
+    for key in net.blobs:
+        print(net.blobs[key])
 
     #text_format.PrintMessage(net_parameter,open("test1.weights","w"))
 
