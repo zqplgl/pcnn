@@ -56,27 +56,6 @@ class ConvolutionLayer(Layer):
             self.__stride_h = convolution_param.stride[0]
             self.__stride_w = convolution_param.stride[0]
 
-    def __conv(self,im):
-        assert len(im.shape)==2,"error conv blob"
-        out_w = int((im.shape[1]+2*self.__pad_w-self.__kernel_w)/self.__stride_w +1)
-        out_h = int((im.shape[0]+2*self.__pad_h-self.__kernel_h)/self.__stride_h +1)
-        assert out_h>0 and out_w>0,"output feature map error:[%s,%s]"%(out_h,out_w)
-        output = np.zeros([out_h,out_w],dtype=np.float32)
-
-        for h in range(out_h):
-            for w in range(out_w):
-                for row in range(self.__kernel_h):
-                    offset_h = self.__stride_h*h-self.__pad_h + row
-                    if offset_h < 0 or offset_h >= im.shape[0]:
-                        continue
-                    for col in range(self.__kernel_w):
-                        offset_w = self.__stride_w*w-self.__pad_w+col
-                        if offset_w < 0 or offset_w >= im.shape[1]:
-                            continue
-                        output[h][w] += self._w[row][col]*im[offset_h][offset_w]
-
-        return output
-
     def __conv(self,bottom_blob,top_blob):
         bottom_n,bottom_c,bottom_h,bottom_w = bottom_blob.shape
         top_n,top_c,top_h,top_w = top_blob.shape
@@ -111,10 +90,4 @@ class ConvolutionLayer(Layer):
 
         self.__conv(bottom_blob,top_blob)
         sys.stderr.write("%s forward successfully\n"%self._name)
-
-if __name__=="__main__":
-    a = [1,2,3,4]
-    b = np.array(a,dtype=np.float32)
-    print(b)
-
 
