@@ -22,7 +22,7 @@ def run():
     net.blobs["data"].reshape(*im.shape)
     net.blobs["data"].data[...] = im
     net.forward()
-    print(net.blobs["conv1"].data)
+    print(net.blobs["pool1"].data)
 
 def run_2():
     a = np.array([[1,2],[3,4]],dtype=np.float32)

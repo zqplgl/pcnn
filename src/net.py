@@ -78,9 +78,8 @@ class Net:
 if __name__=="__main__":
     input = {}
     input["data"] = np.array([1,2,3],dtype=np.float32)
-    prototxt = "/home/zqp/install_lib/models/mnist/deploy.prototxt"
-    prototxt = "/home/zqp/github/pcnn/examples/mnist/deploy.prototxt"
-    weight_file = "/home/zqp/install_lib/models/mnist/weight.caffemodel"
+    prototxt = "../examples/mnist/deploy.prototxt"
+    weight_file = "../examples/mnist/weight.caffemodel"
 
     net = Net(prototxt=prototxt)
     net.load_weights_from_caffemodel(weight_file)
@@ -89,8 +88,8 @@ if __name__=="__main__":
     net.input({"data":im})
     net.forward_layer(0)
 
-    for key in net.blobs:
-        print(net.blobs[key])
+    print(net.blobs["pool1"].shape)
+    print(net.blobs["pool1"])
 
     #text_format.PrintMessage(net_parameter,open("test1.weights","w"))
 
