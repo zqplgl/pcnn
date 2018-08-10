@@ -24,7 +24,7 @@ class ConvolutionLayer(Layer):
         top_shape = self.__generate_top_shape(bottom_shape)
         blobs[self._tops[0]] = np.zeros(top_shape,dtype=np.float32)
 
-        sys.stderr.write("init Layer %s :%s->%s successfully\n"%(self._name,bottom_shape,blobs[self._tops[0]].shape))
+        sys.stderr.write("init Layer %s :%s->%s successfully\n"%(self._name,bottom_shape,top_shape))
 
     def __generate_top_shape(self,bottom_shape):
         out_n = bottom_shape[0]

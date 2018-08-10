@@ -117,7 +117,7 @@ if __name__=="__main__":
     net.input({"data":im})
     net.forward_layer()
 
-    print(net.blobs["pool2"])
+    print(net.blobs["ip1"])
 
 
     #text_format.PrintMessage(net_parameter,open("test1.weights","w"))

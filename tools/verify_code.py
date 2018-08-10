@@ -26,15 +26,22 @@ def run():
 
     caffe.set_mode_gpu()
     net = caffe.Net(prototxt,weight_file,caffe.TEST)
-
-    #im = np.array([[[[1,2,3,4,5,6],[4,5,6,7,8,9],[1,2,3,4,5,6],[4,5,6,7,8,9],[1,2,3,4,5,6],[4,5,6,7,8,9]]]],dtype=np.float32)
     im = process_im()
 
     net.blobs["data"].reshape(*im.shape)
     net.blobs["data"].data[...] = im
     net.forward()
 
-    print(net.blobs["pool2"].data)
+    #print(net.blobs["pool2"].data)
+    for key in net.params.keys():
+        print(key)
+
+    print(net.blobs["pool2"].data.shape)
+    print(net.params["ip1"][0].data.shape)
+    print(net.params["ip1"][1].data.shape)
+    print(net.blobs["ip1"].data.shape)
+    print(net.blobs["ip1"].data)
+
 
 if __name__=="__main__":
     run()
