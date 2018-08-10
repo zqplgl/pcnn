@@ -1,4 +1,5 @@
 from google.protobuf import text_format
+import cv2
 from collections import OrderedDict
 import numpy as np
 import sys
@@ -75,6 +76,34 @@ class Net:
         for layer in self.__layers[index:]:
             layer.forward(self.__blobs)
 
+def process_im():
+    im_path = "../data/mnist/0/000003.png"
+    im = cv2.imread(im_path,-1)
+    im = im.astype(np.float32)
+    im = im.reshape([1,1,28,28])
+
+    return im
+
+def print_blob(blob,text):
+    assert len(blob.shape)==4
+    f = open(text,"w")
+
+    for n in range(blob.shape[0]):
+        for c in range(blob.shape[1]):
+            for h in range(blob.shape[2]):
+                for w in range(blob.shape[3]):
+                    f.write(str(blob[n][c][h][w])+"\n")
+
+def load_from_txt():
+    f = open("../tools/verify_pool1.txt")
+
+    pool1 = [float(num) for num in f.read().split()]
+    pool1 = np.array(pool1,dtype=np.float32).reshape([1,20,12,12])
+
+    print(pool1.shape)
+    return pool1
+
+
 if __name__=="__main__":
     input = {}
     input["data"] = np.array([1,2,3],dtype=np.float32)
@@ -84,12 +113,12 @@ if __name__=="__main__":
     net = Net(prototxt=prototxt)
     net.load_weights_from_caffemodel(weight_file)
 
-    im = np.array([[[[1,2,3,4,5,6],[4,5,6,7,8,9],[1,2,3,4,5,6],[4,5,6,7,8,9],[1,2,3,4,5,6],[4,5,6,7,8,9]]]],dtype=np.float32)
+    im = process_im()
     net.input({"data":im})
-    net.forward_layer(0)
+    net.forward_layer()
 
-    print(net.blobs["pool1"].shape)
-    print(net.blobs["pool1"])
+    print(net.blobs["pool2"])
+
 
     #text_format.PrintMessage(net_parameter,open("test1.weights","w"))
 

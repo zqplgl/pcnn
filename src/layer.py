@@ -23,7 +23,7 @@ class Layer(object):
 
     def load_parameter(self,blobs):
         w = np.reshape(np.array(blobs[0].data,dtype=np.float32),self.blobshape_convert(blobs[0].shape))
-        b = np.array(blobs[1].data)
+        b = np.array(blobs[1].data,dtype=np.float32)
         assert b.shape==self._b.shape,"Layer %s w cannot convert parameter %s to %s"%(self._name,self._b.shape,b.shape)
         assert w.shape==self._w.shape,"Layer %s b cannot convert parameter %s to %s"%(self._name,self._w.shape,w.shape)
         self._w = w

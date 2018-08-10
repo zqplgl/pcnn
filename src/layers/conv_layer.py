@@ -61,9 +61,9 @@ class ConvolutionLayer(Layer):
         top_n,top_c,top_h,top_w = top_blob.shape
         for t_n in range(top_n):
             for t_c in range(top_c):
-                for b_c in range(bottom_c):
-                    for h in range(top_h):
-                        for w in range(top_w):
+                for h in range(top_h):
+                    for w in range(top_w):
+                        for b_c in range(bottom_c):
                             for row in range(self.__kernel_h):
                                 offset_h = self.__stride_h*h-self.__pad_h + row
                                 if offset_h < 0 or offset_h >= bottom_h:
@@ -74,7 +74,7 @@ class ConvolutionLayer(Layer):
                                         continue
                                     top_blob[t_n][t_c][h][w] += bottom_blob[t_n][b_c][offset_h][offset_w]*self._w[t_c][b_c][row][col]
 
-                            top_blob[t_n][t_c][h][w] += self._b[t_c]
+                        top_blob[t_n][t_c][h][w] += self._b[t_c]
 
     def forward(self,blobs):
         bottom_blob = blobs[self._bottoms[0]]
