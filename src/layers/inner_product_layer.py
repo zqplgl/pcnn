@@ -53,6 +53,8 @@ class InnerProductLayer(Layer):
 
         top_blob[...] = np.dot(bottom_blob,self._w.transpose()) + self._b
 
+        sys.stderr.write("%s forward successfully\n"%self._name)
+
 if __name__=="__main__":
     prototxt = "/home/zqp/github/caffe/examples/mnist/lenet_train_test.prototxt"
     net = caffe_pb2.NetParameter()

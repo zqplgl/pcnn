@@ -93,12 +93,12 @@ layer {
     }
   }
 }
-#layer {
-#  name: "relu1"
-#  type: "ReLU"
-#  bottom: "ip1"
-#  top: "ip1"
-#}
+layer {
+  name: "relu1"
+  type: "ReLU"
+  bottom: "ip1"
+  top: "ip1"
+}
 #layer {
 #  name: "ip2"
 #  type: "InnerProduct"
