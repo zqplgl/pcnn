@@ -36,11 +36,9 @@ def run():
     for key in net.params.keys():
         print(key)
 
-    print(net.blobs["pool2"].data.shape)
-    print(net.params["ip1"][0].data.shape)
-    print(net.params["ip1"][1].data.shape)
-    print(net.blobs["ip1"].data.shape)
-    print(net.blobs["ip1"].data)
+    print(net.blobs["ip2"].data.shape)
+    print(net.blobs["ip2"].data)
+    print(net.blobs["prob"].data)
 
 
 if __name__=="__main__":

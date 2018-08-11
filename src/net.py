@@ -77,7 +77,7 @@ class Net:
             layer.forward(self.__blobs)
 
 def process_im():
-    im_path = "../data/mnist/0/000003.png"
+    im_path = "../data/mnist/3/000030.png"
     im = cv2.imread(im_path,-1)
     im = im.astype(np.float32)
     im = im.reshape([1,1,28,28])
@@ -117,7 +117,7 @@ if __name__=="__main__":
     net.input({"data":im})
     net.forward_layer()
 
-    print(net.blobs["ip1"])
+    print(net.blobs["prob"])
 
 
     #text_format.PrintMessage(net_parameter,open("test1.weights","w"))
